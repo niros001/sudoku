@@ -101,5 +101,6 @@ const generateBoard = (difficulty) => {
     shuffleRowsGroup(solvedBoard);
   }
   const {playableBoard, solutions} = getPlayableBoard(solvedBoard, difficulty);
+
   return {solvedBoard, playableBoard, solutions};
 }
