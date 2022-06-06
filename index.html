@@ -30,16 +30,20 @@
             </div>
         </div>
         <div id="numbers" class="row"></div>
-        <h2 id="congratulation" style="display: none">Congratulation! You are done!</h2>
+        <h2 id="congratulation">Congratulation! You are done!</h2>
         <div class="row">
-            <input type="radio" id="easy" name="difficulty" value="easy">
-            <label for="easy">Easy</label><br>
-            <input type="radio" id="medium" name="difficulty" value="medium" checked>
-            <label for="medium">Medium</label><br>
-            <input type="radio" id="hard" name="difficulty" value="hard">
-            <label for="hard">Hard</label>
-            <button onclick="onStart()">New Game</button>
-            <button onclick="onSolve()">Solve</button>
+            <div>
+                <input type="radio" id="easy" name="difficulty" value="easy">
+                <label for="easy">Easy</label><br>
+                <input type="radio" id="medium" name="difficulty" value="medium" checked>
+                <label for="medium">Medium</label><br>
+                <input type="radio" id="hard" name="difficulty" value="hard">
+                <label for="hard">Hard</label>
+            </div>
+            <div>
+                <button onclick="onStart()">New Game</button>
+                <button onclick="onSolve()">Solve</button>
+            </div>
         </div>
 <!--        <div class="row">-->
 <!--            <span>* There is <span id="solutions" style="font-weight: bold">0</span> solutions for this board</span>-->
