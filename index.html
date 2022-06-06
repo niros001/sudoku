@@ -12,6 +12,7 @@
     <div class="container">
         <div class="row info">
             <span>Difficult: <span id="difficulty">-</span></span>
+<!--            <span>Mistakes: <span id="mistakes">0</span> / 3</span>-->
             <span>Time: <span id="timer">00:00</span></span>
         </div>
         <div id="board" class="board">
@@ -29,6 +30,7 @@
             </div>
         </div>
         <div id="numbers" class="row"></div>
+        <h2 id="congratulation" style="display: none">Congratulation! You are done!</h2>
         <div class="row">
             <input type="radio" id="easy" name="difficulty" value="easy">
             <label for="easy">Easy</label><br>
@@ -36,13 +38,12 @@
             <label for="medium">Medium</label><br>
             <input type="radio" id="hard" name="difficulty" value="hard">
             <label for="hard">Hard</label>
-            <button onclick="onStart()">New</button>
-            <button onclick="onFinish()">Finish</button>
+            <button onclick="onStart()">New Game</button>
             <button onclick="onSolve()">Solve</button>
         </div>
-        <div class="row">
-            <span>* There is <span id="solutions" style="font-weight: bold">0</span> solutions for this board</span>
-        </div>
+<!--        <div class="row">-->
+<!--            <span>* There is <span id="solutions" style="font-weight: bold">0</span> solutions for this board</span>-->
+<!--        </div>-->
     </div>
 </body>
 </html>

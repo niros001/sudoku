@@ -95,12 +95,16 @@ const onFill = (number) => {
     currentPlayableBoard[i][j] = number;
     selected.style.color = 'black';
     selected.innerText = number;
+    onFinish();
   } else {
     console.log('Please select square!')
   }
 }
 
 const onStart = () => {
+  // Show / Hide relevant components
+  document.getElementById('numbers').style.display = 'flex'
+  document.getElementById('congratulation').style.display = 'none'
   // Set board
   const difficulty = document.getElementById('difficulty');
   const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
@@ -110,7 +114,7 @@ const onStart = () => {
   currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
   currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
   currentSolutions = JSON.parse(JSON.stringify(solutions));
-  document.getElementById('solutions').innerText = solutions.length.toString();
+  // document.getElementById('solutions').innerText = solutions.length.toString();
   for(let i = 0 ; i < 9 ; i++) {
     for (let j = 0 ; j < 9 ; j++) {
       const square = document.getElementById(`${i}-${j}`);
@@ -146,9 +150,14 @@ const onStart = () => {
 }
 
 const onFinish = () => {
-  // Stop timer
-  clearInterval(window.timerInterval);
-  isBoardValid(currentPlayableBoard) ? alert('Success!') : alert('Failed!')
+  if (isBoardValid(currentPlayableBoard)) {
+    // Stop timer
+    clearInterval(window.timerInterval);
+
+    // Show / Hide relevant components
+    document.getElementById('numbers').style.display = 'none'
+    document.getElementById('congratulation').style.display = 'flex'
+  }
 }
 
 const onSolve = () => {
@@ -166,4 +175,5 @@ const onSolve = () => {
       }
     }
   }
+  onFinish();
 }
