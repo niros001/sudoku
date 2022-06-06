@@ -77,13 +77,19 @@ const getPlayableBoard = (board, difficulty) => {
             break;
         }
     }
-    for (let i = 0 ; i < holes ; i++) {
+    while (holes > 0) {
         const hole = getRandNumber(availableNumbers);
         const xPos = Math.floor(hole / 9);
         const yPos = hole % 9;
+        const lastTry = newBoard[xPos][yPos];
         newBoard[xPos][yPos] = 0;
+        solutions.splice(0, solutions.length);
+        solver(newBoard);
+        if (solutions.length === 1) {
+            holes--;
+        } else {
+            newBoard[xPos][yPos] = lastTry;
+        }
     }
-    solutions.splice(0, solutions.length);
-    solver(newBoard);
     return {playableBoard: newBoard, solutions};
 }
