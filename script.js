@@ -95,7 +95,20 @@ const onFill = (number) => {
     currentPlayableBoard[i][j] = number;
     selected.style.color = 'black';
     selected.innerText = number;
-    onFinish();
+
+    // Check for mistake
+    if (currentPlayableBoard[i][j] !== currentSolvedBoard[i][j]) {
+      selected.style.color = 'red';
+      const mistakes = document.getElementById('mistakes');
+      mistakes.innerText = (parseInt(mistakes.innerText) + 1).toString();
+      if (mistakes.innerText === '3') {
+        // Show / Hide relevant components
+        document.getElementById('numbers').style.display = 'none';
+        document.getElementById('game-over').style.display = 'flex';
+        clearInterval(window.timerInterval);
+      }
+    }
+
   } else {
     console.log('Please select square!')
   }
@@ -105,6 +118,8 @@ const onStart = () => {
   // Show / Hide relevant components
   document.getElementById('numbers').style.display = 'flex'
   document.getElementById('congratulation').style.display = 'none'
+  document.getElementById('game-over').style.display = 'none'
+  document.getElementById('mistakes').innerText = '0';
   // Set board
   const difficulty = document.getElementById('difficulty');
   const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
