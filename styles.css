@@ -114,7 +114,7 @@ label {
     color: white;
 }
 
-@media (orientation: landscape) {
+@media (orientation: landscape) and (max-width: 1180px){
     .container {
         flex-direction: row;
     }
