@@ -109,6 +109,9 @@ const onFill = (number) => {
       }
     }
 
+    // Check for solved board
+    onFinish();
+
   } else {
     console.log('Please select square!')
   }
