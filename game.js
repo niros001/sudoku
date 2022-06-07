@@ -1,4 +1,4 @@
-let currentSolvedBoard, currentPlayableBoard, currentSolutions;
+let currentSolvedBoard, currentPlayableBoard;
 
 window.addEventListener('load', () => {
   // Create board
@@ -128,11 +128,10 @@ const onStart = () => {
   const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
   difficulty.style.textTransform = 'capitalize';
   difficulty.innerText = difficultyLvl;
-  const {solvedBoard, playableBoard, solutions} = generateBoard(difficultyLvl);
+  const {solvedBoard, playableBoard} = generateBoard(difficultyLvl);
   currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
   currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
-  currentSolutions = JSON.parse(JSON.stringify(solutions));
-  // document.getElementById('solutions').innerText = solutions.length.toString();
+
   for(let i = 0 ; i < 9 ; i++) {
     for (let j = 0 ; j < 9 ; j++) {
       const square = document.getElementById(`${i}-${j}`);
