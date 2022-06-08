@@ -115,10 +115,11 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
 
 
 const generateBoard = (difficulty) => {
+    let counter = 0;
     const solutions = [];
     const tryBoard = JSON.parse(JSON.stringify(defaultBoard));
     const freeCells = [...Array(81).keys()].map((_, n) => n);
-    for (let i = 0 ; i < 24 ; i++) {
+    for (let i = 0 ; i < 26 ; i++) {
         // Position
         const randPos = Math.floor(Math.random() * freeCells.length);
         const pos = freeCells[randPos];
@@ -130,13 +131,22 @@ const generateBoard = (difficulty) => {
         tryBoard[xPos][yPos] = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)] || 0;
         freeCells.splice(randPos, 1);
     }
-
-    solver(tryBoard, (solution) => solutions.push(solution));
+    try {
+        solver(tryBoard, (solution) => {
+            counter++
+            if (counter === 2000000) {
+                throw new Error('Too much attempts');
+            }
+            solutions.push(solution);
+        });
+    } catch (e) {
+        return generateBoard(difficulty);
+    }
     if(solutions.length) {
         const solvedBoard = solutions[Math.floor(Math.random() * solutions.length)];
         const playableBoard = getPlayableBoard(solvedBoard, difficulty);
         return ({playableBoard, solvedBoard})
     } else {
-        generateBoard();
+        return generateBoard(difficulty);
     }
 }
