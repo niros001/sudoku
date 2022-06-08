@@ -123,47 +123,58 @@ const onStart = () => {
   document.getElementById('congratulation').style.display = 'none'
   document.getElementById('game-over').style.display = 'none'
   document.getElementById('mistakes').innerText = '0';
-  // Set board
-  const difficulty = document.getElementById('difficulty');
-  const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
-  difficulty.style.textTransform = 'capitalize';
-  difficulty.innerText = difficultyLvl;
-  const {solvedBoard, playableBoard} = generateBoard(difficultyLvl);
-  currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
-  currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
+  document.getElementById('board').style.opacity = '0.7';
+  document.getElementById('new-game').setAttribute('disabled', '');
+  document.getElementById('solve-game').setAttribute('disabled', '');
 
-  for(let i = 0 ; i < 9 ; i++) {
-    for (let j = 0 ; j < 9 ; j++) {
-      const square = document.getElementById(`${i}-${j}`);
-      square.classList.remove('selected');
-      square.classList.remove('highlight');
-      if (currentPlayableBoard[i][j]) {
-        square.style.color = 'gray';
-        square.style.fontWeight = 'bold';
-        square.innerText = currentPlayableBoard[i][j];
-        square.onclick = null;
-      } else {
-        square.style.color = 'black';
-        square.style.fontWeight = '400';
-        square.innerText = '';
-        square.onclick = () => onSelect(i, j);
+  setTimeout(() => {
+    // Set board
+    const difficulty = document.getElementById('difficulty');
+    const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
+    difficulty.style.textTransform = 'capitalize';
+    difficulty.innerText = difficultyLvl;
+    const {solvedBoard, playableBoard} = generateBoard(difficultyLvl);
+    currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
+    currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
+
+    // Show / Hide relevant components
+    document.getElementById('board').style.opacity = '1';
+    document.getElementById('new-game').removeAttribute('disabled');
+    document.getElementById('solve-game').removeAttribute('disabled');
+
+    for(let i = 0 ; i < 9 ; i++) {
+      for (let j = 0 ; j < 9 ; j++) {
+        const square = document.getElementById(`${i}-${j}`);
+        square.classList.remove('selected');
+        square.classList.remove('highlight');
+        if (currentPlayableBoard[i][j]) {
+          square.style.color = 'gray';
+          square.style.fontWeight = 'bold';
+          square.innerText = currentPlayableBoard[i][j];
+          square.onclick = null;
+        } else {
+          square.style.color = 'black';
+          square.style.fontWeight = '400';
+          square.innerText = '';
+          square.onclick = () => onSelect(i, j);
+        }
       }
     }
-  }
 
-  // Set timer
-  let seconds = 0;
-  const timer = document.getElementById('timer');
-  timer.innerText = '00:00';
-  clearInterval(window.timerInterval);
-  window.timerInterval = setInterval(() => {
-    seconds += 1;
-    const minutes = Math.floor(seconds / 60);
-    timer.innerText = `${minutes.toString().padStart(2, '0')}:${Math.min(seconds - (minutes * 60), 59).toString().padStart(2, '0')}`
-    if (seconds === 3600) {
-      clearInterval(window.timerInterval);
-    }
-  }, 1000);
+    // Set timer
+    let seconds = 0;
+    const timer = document.getElementById('timer');
+    timer.innerText = '00:00';
+    clearInterval(window.timerInterval);
+    window.timerInterval = setInterval(() => {
+      seconds += 1;
+      const minutes = Math.floor(seconds / 60);
+      timer.innerText = `${minutes.toString().padStart(2, '0')}:${Math.min(seconds - (minutes * 60), 59).toString().padStart(2, '0')}`
+      if (seconds === 3600) {
+        clearInterval(window.timerInterval);
+      }
+    }, 1000);
+  }, 10)
 }
 
 const onFinish = () => {
