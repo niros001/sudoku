@@ -114,23 +114,23 @@ label {
     color: white;
 }
 
-@media (orientation: landscape) and (max-width: 1180px){
-    .container {
-        flex-direction: row;
-    }
-    .board {
-        max-width: calc(9*42px);
-    }
-    .row {
-        width: calc(9*42px);
-        flex-direction: column;
-    }
-    .square {
-        width: 40px;
-        height: 40px;
-    }
-    .number {
-        margin: 5px 0;
-        box-shadow: 5px 5px 5px 5px white;
-    }
-}
+/*@media (orientation: landscape) and (max-width: 1180px){*/
+/*    .container {*/
+/*        flex-direction: row;*/
+/*    }*/
+/*    .board {*/
+/*        max-width: calc(9*42px);*/
+/*    }*/
+/*    .row {*/
+/*        width: calc(9*42px);*/
+/*        flex-direction: column;*/
+/*    }*/
+/*    .square {*/
+/*        width: 40px;*/
+/*        height: 40px;*/
+/*    }*/
+/*    .number {*/
+/*        margin: 5px 0;*/
+/*        box-shadow: 5px 5px 5px 5px white;*/
+/*    }*/
+/*}*/
