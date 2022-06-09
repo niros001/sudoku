@@ -62,18 +62,14 @@ const getFreeCell = (board) => {
     }
     return null;
 }
-const solver = (board, cb, counter = 0) => {
-    // console.log(counter)
-    // if (counter > 2000) {
-    //     throw new Error('Too much attempts');
-    // }
+const solver = (board, cb) => {
     const newBoard = JSON.parse(JSON.stringify(board));
     const freeCell = getFreeCell(newBoard);
     if (freeCell) {
         const possibleNumbers = getPossibleNumbers(newBoard, ...freeCell);
         for (let i = 0 ; i < possibleNumbers.length ; i++) {
             newBoard[freeCell[0]][freeCell[1]] = possibleNumbers[i];
-            solver(newBoard, cb, counter + 1)
+            solver(newBoard, cb)
         }
     } else {
         cb(newBoard);
