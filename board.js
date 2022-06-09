@@ -108,13 +108,12 @@ const solver = (board, history = {}, solutions = [], multipleSolutions = false, 
 }
 
 const getPlayableBoard = (solvedBoard, difficulty) => {
-    let solutions = [];
     const newBoard = JSON.parse(JSON.stringify(solvedBoard))
     const availableNumbers = [...Array(81).keys()];
     let holes;
     switch (difficulty) {
         case 'easy': {
-            holes = 30;
+            holes = 35;
             break;
         }
         case 'medium': {
@@ -122,7 +121,7 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
             break;
         }
         case 'hard': {
-            holes = 50;
+            holes = 45;
             break;
         }
     }
@@ -132,9 +131,8 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
         const yPos = hole % 9;
         const lastTry = newBoard[xPos][yPos];
         newBoard[xPos][yPos] = 0;
-        solutions.splice(0, solutions.length);
-        solutions = solver(newBoard);
-        if (solutions.length === 1) {
+
+        if (solver(newBoard).length === 1) {
             holes--;
         } else {
             newBoard[xPos][yPos] = lastTry;
@@ -145,8 +143,13 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
 
 
 const generateBoard = (difficulty) => {
-    const solutions = solver(JSON.parse(JSON.stringify(defaultBoard)));
-    const solvedBoard = solutions[Math.floor(Math.random() * solutions.length)];
-    const playableBoard = getPlayableBoard(solvedBoard, difficulty);
-    return ({playableBoard, solvedBoard})
+    try {
+        const solutions = solver(JSON.parse(JSON.stringify(defaultBoard)));
+        const solvedBoard = solutions[Math.floor(Math.random() * solutions.length)];
+        const playableBoard = getPlayableBoard(solvedBoard, difficulty);
+        return ({playableBoard, solvedBoard})
+    } catch (e) {
+        return generateBoard(difficulty);
+    }
+
 }
