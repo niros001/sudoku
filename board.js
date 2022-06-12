@@ -10,6 +10,8 @@ const defaultBoard = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
+const copyOf = (v) => JSON.parse(JSON.stringify(v))
+
 const getRandNumber = (arr) => {
     const rand = Math.floor(Math.random() * arr.length);
     const num = arr[rand];
@@ -63,52 +65,58 @@ const getFreeCell = (board) => {
     return null;
 }
 
-const solver = (board, history = {}, solutions = [], multipleSolutions = false, debug = false) => {
-    const newBoard = JSON.parse(JSON.stringify(board));
+const isPossibleRollback = (history) => {
+    const historyValues = Object.values(history).filter((value) => !!value.length);
+    return !!historyValues.length;
+}
+
+const rollbackPossibleCell = (board, history) => {
+    for (let i = 0 ; i < Object.keys(history).length ; i++) {
+        const key = Object.keys(history).pop();
+        const [x, y] = key.split('-');
+        board[x][y] = 0;
+        if (history[key] && history[key].length) {
+            return [board, history]
+        } else {
+            delete history[key];
+        }
+    }
+    throw new Error('Not solvable board')
+}
+
+const solver = (board, history = {}, solutions = [], multipleSolutions = false) => {
+    const newBoard = copyOf(board);
     const freeCell = getFreeCell(newBoard);
     if (freeCell) {
         // Get possible numbers with history
         let cellHistory = history[freeCell.join('-')];
         const possibleNumbers = cellHistory || getPossibleNumbers(newBoard, ...freeCell);
-
         // There is some possibilities to try
         if (possibleNumbers.length) {
             if (!cellHistory) {
                 // Init history on first time per free cell
-                cellHistory = JSON.parse(JSON.stringify(possibleNumbers));
+                cellHistory = copyOf(possibleNumbers);
             }
             // Add new number to the board
             newBoard[freeCell[0]][freeCell[1]] = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
-
             // Remove the number from the history - to not try again same number
             cellHistory.splice(cellHistory.findIndex((n) => n === newBoard[freeCell[0]][freeCell[1]]), 1);
-
             // Go next cell
-            return solver(newBoard, {...history, [freeCell.join('-')]: cellHistory}, solutions)
+            return solver(newBoard, {...history, [freeCell.join('-')]: cellHistory}, solutions, multipleSolutions)
         } else { // Go back to last cell and try other number
-            // Remove current cell history
-            delete history[freeCell.join('-')];
-
-            // Remove the number from the last cell
-            if (Object.keys(history).length) {
-                const lastFreeCell = (Object.keys(history)[Object.keys(history).length - 1]).split('-');
-                newBoard[lastFreeCell[0]][lastFreeCell[1]] = 0;
-
-                // Go last cell
-                return solver(newBoard, history, solutions)
-            } else {
-                if (!multipleSolutions) {
-                    return solutions;
-                }
-            }
+            return isPossibleRollback(history) ? solver(...rollbackPossibleCell(board, history), solutions, multipleSolutions) : solutions;
         }
     } else {
-        return [newBoard];
+        const solution = copyOf(newBoard);
+        if (multipleSolutions) {
+            return isPossibleRollback(history) ? solver(...rollbackPossibleCell(board, history), [...solutions, solution], multipleSolutions) : solutions;
+        }
+        return [solution]
     }
 }
 
 const getPlayableBoard = (solvedBoard, difficulty) => {
-    const newBoard = JSON.parse(JSON.stringify(solvedBoard))
+    const newBoard = copyOf(solvedBoard)
     const availableNumbers = [...Array(81).keys()];
     let holes;
     switch (difficulty) {
@@ -132,7 +140,7 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
         const lastTry = newBoard[xPos][yPos];
         newBoard[xPos][yPos] = 0;
 
-        if (solver(newBoard).length === 1) {
+        if (solver(copyOf(newBoard), {}, [], false).length === 1) {
             holes--;
         } else {
             newBoard[xPos][yPos] = lastTry;
@@ -144,12 +152,13 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
 
 const generateBoard = (difficulty) => {
     try {
-        const solutions = solver(JSON.parse(JSON.stringify(defaultBoard)));
+        const solutions = solver(copyOf(defaultBoard));
         const solvedBoard = solutions[Math.floor(Math.random() * solutions.length)];
         const playableBoard = getPlayableBoard(solvedBoard, difficulty);
+        console.log({solutions, solvedBoard, playableBoard})
         return ({playableBoard, solvedBoard})
     } catch (e) {
+        console.log(e.message)
         return generateBoard(difficulty);
     }
-
 }
