@@ -123,9 +123,9 @@ const onStart = () => {
   document.getElementById('congratulation').style.display = 'none'
   document.getElementById('game-over').style.display = 'none'
   document.getElementById('mistakes').innerText = '0';
+  document.getElementById('hints').innerText = '0';
   document.getElementById('board').style.opacity = '0.7';
   document.getElementById('new-game').setAttribute('disabled', '');
-  document.getElementById('solve-game').setAttribute('disabled', '');
 
   setTimeout(() => {
     // Set board
@@ -140,20 +140,21 @@ const onStart = () => {
     // Show / Hide relevant components
     document.getElementById('board').style.opacity = '1';
     document.getElementById('new-game').removeAttribute('disabled');
-    document.getElementById('solve-game').removeAttribute('disabled');
+    document.getElementById('get-hint').removeAttribute('disabled');
 
     for(let i = 0 ; i < 9 ; i++) {
       for (let j = 0 ; j < 9 ; j++) {
         const square = document.getElementById(`${i}-${j}`);
         square.classList.remove('selected');
         square.classList.remove('highlight');
+        square.classList.remove('static');
+        square.classList.remove('dynamic');
+        square.classList.remove('hint');
         if (currentPlayableBoard[i][j]) {
-          square.classList.remove('dynamic');
           square.classList.add('static');
           square.innerText = currentPlayableBoard[i][j];
           square.onclick = null;
         } else {
-          square.classList.remove('static');
           square.classList.add('dynamic');
           square.innerText = '';
           square.onclick = () => onSelect(i, j);
@@ -185,23 +186,21 @@ const onFinish = () => {
     // Show / Hide relevant components
     document.getElementById('numbers').style.display = 'none'
     document.getElementById('congratulation').style.display = 'flex'
+    document.getElementById('get-hint').setAttribute('disabled', '');
   }
 }
 
-const onSolve = () => {
-  for (let i = 0; i < 9; i++) {
-    for (let j = 0; j < 9; j++) {
-      const isError = currentPlayableBoard[i][j] && (currentPlayableBoard[i][j] !== currentSolvedBoard[i][j]);
-      const square = document.getElementById(`${i}-${j}`);
-      if (currentPlayableBoard && isError) {
-        square.style.color = 'red';
-      }
-      if (!currentPlayableBoard[i][j]) {
-        square.style.color = 'blue';
-        square.innerText = currentSolvedBoard[i][j];
-        currentPlayableBoard[i][j] = currentSolvedBoard[i][j];
-      }
-    }
+const onHint = () => {
+  const freeCell = getFreeCell(currentPlayableBoard);
+  const [x, y] = freeCell;
+  const square = document.getElementById(`${x}-${y}`);
+  currentPlayableBoard[x][y] = currentSolvedBoard[x][y];
+  square.classList.add('hint');
+  square.innerText = currentSolvedBoard[x][y];
+  const hints = document.getElementById('hints');
+  hints.innerText = (parseInt(hints.innerText) + 1).toString();
+  if (hints.innerText === '2') {
+    document.getElementById('get-hint').setAttribute('disabled', '');
   }
   onFinish();
 }

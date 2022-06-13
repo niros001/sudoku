@@ -95,6 +95,10 @@ button {
     font-weight: 400;
 }
 
+.hint {
+    animation: color 3s linear;
+}
+
 .number {
     font-size: 20px;
     font-weight: bold;
@@ -124,6 +128,17 @@ button {
 label {
     color: white;
 }
+
+button {
+    background-color: lavender;
+    border-radius: 15px;
+}
+
+@keyframes color {
+    0%   { color: gold; }
+    100%   { color: black; }
+}
+
 
 /*@media (orientation: landscape) and (max-width: 1180px){*/
 /*    .container {*/

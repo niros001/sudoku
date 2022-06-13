@@ -73,7 +73,7 @@ const isPossibleRollback = (history) => {
 const rollbackPossibleCell = (board, history) => {
     const historyLength = Object.keys(history).length
     for (let i = 0 ; i < historyLength ; i++) {
-        const key = Object.keys(copyOf(history)).pop();
+        const key = Object.keys(history).pop();
         const [x, y] = key.split('-');
         board[x][y] = 0;
         if (history[key] && history[key].length) {
