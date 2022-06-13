@@ -121,7 +121,7 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
     let holes;
     switch (difficulty) {
         case 'easy': {
-            holes = Math.floor(81 * 0.4); // 40% hidden
+            holes = Math.floor(81 * 0.45); // 45% hidden
             break;
         }
         case 'medium': {
@@ -129,7 +129,7 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
             break;
         }
         case 'hard': {
-            holes = Math.floor(81 * 0.6); // 60% hidden
+            holes = Math.floor(81 * 0.55); // 55% hidden
             break;
         }
     }

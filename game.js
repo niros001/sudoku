@@ -148,13 +148,13 @@ const onStart = () => {
         square.classList.remove('selected');
         square.classList.remove('highlight');
         if (currentPlayableBoard[i][j]) {
-          square.style.color = 'gray';
-          square.style.fontWeight = 'bold';
+          square.classList.remove('dynamic');
+          square.classList.add('static');
           square.innerText = currentPlayableBoard[i][j];
           square.onclick = null;
         } else {
-          square.style.color = 'black';
-          square.style.fontWeight = '400';
+          square.classList.remove('static');
+          square.classList.add('dynamic');
           square.innerText = '';
           square.onclick = () => onSelect(i, j);
         }
