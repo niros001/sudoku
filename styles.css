@@ -13,7 +13,7 @@ body {
 .board {
     display: flex;
     flex-wrap: wrap;
-    max-width: calc(9*72px);
+    max-width: calc(9*52px);
     position: relative;
     background-color: lavender;
 }
@@ -54,7 +54,7 @@ body {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: calc(9*72px);
+    width: calc(9*52px);
     justify-content: space-between;
     margin: 15px 0;
 }
@@ -66,8 +66,8 @@ button {
 }
 
 .square {
-    width: 70px;
-    height: 70px;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
