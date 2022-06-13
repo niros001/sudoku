@@ -71,26 +71,25 @@ const isPossibleRollback = (history) => {
 }
 
 const rollbackPossibleCell = (board, history) => {
-    for (let i = 0 ; i < Object.keys(history).length ; i++) {
-        const key = Object.keys(history).pop();
+    const historyLength = Object.keys(history).length
+    for (let i = 0 ; i < historyLength ; i++) {
+        const key = Object.keys(copyOf(history)).pop();
         const [x, y] = key.split('-');
         board[x][y] = 0;
         if (history[key] && history[key].length) {
-            return [board, history]
+            return ({board, history})
         } else {
             delete history[key];
         }
     }
-    throw new Error('Not solvable board')
 }
 
-const solver = (board, history = {}, solutions = [], multipleSolutions = false) => {
-    const newBoard = copyOf(board);
-    const freeCell = getFreeCell(newBoard);
-    if (freeCell) {
+const solver = ({board, history = {}, solutions = [], multipleSolutions = false}) => {
+    const freeCell = getFreeCell(board);
+    if (freeCell) { // There is some free cells
         // Get possible numbers with history
         let cellHistory = history[freeCell.join('-')];
-        const possibleNumbers = cellHistory || getPossibleNumbers(newBoard, ...freeCell);
+        const possibleNumbers = cellHistory || getPossibleNumbers(board, ...freeCell);
         // There is some possibilities to try
         if (possibleNumbers.length) {
             if (!cellHistory) {
@@ -98,21 +97,22 @@ const solver = (board, history = {}, solutions = [], multipleSolutions = false) 
                 cellHistory = copyOf(possibleNumbers);
             }
             // Add new number to the board
-            newBoard[freeCell[0]][freeCell[1]] = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
+            board[freeCell[0]][freeCell[1]] = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
             // Remove the number from the history - to not try again same number
-            cellHistory.splice(cellHistory.findIndex((n) => n === newBoard[freeCell[0]][freeCell[1]]), 1);
+            cellHistory.splice(cellHistory.findIndex((n) => n === board[freeCell[0]][freeCell[1]]), 1);
             // Go next cell
-            return solver(newBoard, {...history, [freeCell.join('-')]: cellHistory}, solutions, multipleSolutions)
+            return solver({board, history: {...history, [freeCell.join('-')]: cellHistory}, solutions, multipleSolutions})
         } else { // Go back to last cell and try other number
-            return isPossibleRollback(history) ? solver(...rollbackPossibleCell(board, history), solutions, multipleSolutions) : solutions;
+            return isPossibleRollback(history) ? solver({...rollbackPossibleCell(board, history), solutions, multipleSolutions}) : solutions;
         }
-    } else {
-        const solution = copyOf(newBoard);
-        if (multipleSolutions) {
-            return isPossibleRollback(history) ? solver(...rollbackPossibleCell(board, history), [...solutions, solution], multipleSolutions) : solutions;
-        }
-        return [solution]
     }
+    // Board solved
+    const solution = copyOf(board);
+    if (multipleSolutions) {
+        solutions.push(solution);
+        return isPossibleRollback(history) ? solver({...rollbackPossibleCell(board, history), solutions, multipleSolutions}) : solutions;
+    }
+    return solution
 }
 
 const getPlayableBoard = (solvedBoard, difficulty) => {
@@ -121,15 +121,15 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
     let holes;
     switch (difficulty) {
         case 'easy': {
-            holes = 35;
+            holes = Math.floor(81 * 0.4); // 40% hidden
             break;
         }
         case 'medium': {
-            holes = 40;
+            holes = Math.floor(81 * 0.5); // 50% hidden
             break;
         }
         case 'hard': {
-            holes = 45;
+            holes = Math.floor(81 * 0.6); // 60% hidden
             break;
         }
     }
@@ -139,8 +139,8 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
         const yPos = hole % 9;
         const lastTry = newBoard[xPos][yPos];
         newBoard[xPos][yPos] = 0;
-
-        if (solver(copyOf(newBoard), {}, [], false).length === 1) {
+        const solutions = solver({board: copyOf(newBoard), multipleSolutions: true})
+        if (solutions.length === 1) {
             holes--;
         } else {
             newBoard[xPos][yPos] = lastTry;
@@ -151,14 +151,15 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
 
 
 const generateBoard = (difficulty) => {
-    try {
-        const solutions = solver(copyOf(defaultBoard));
-        const solvedBoard = solutions[Math.floor(Math.random() * solutions.length)];
-        const playableBoard = getPlayableBoard(solvedBoard, difficulty);
-        console.log({solutions, solvedBoard, playableBoard})
-        return ({playableBoard, solvedBoard})
-    } catch (e) {
-        console.log(e.message)
-        return generateBoard(difficulty);
+    const solvedBoard = solver({board: copyOf(defaultBoard)});
+    let playableBoard;
+    while (!playableBoard) {
+        try {
+            playableBoard = getPlayableBoard(solvedBoard, difficulty);
+        } catch (e) {
+            // console.log(e.message)
+            console.log('Many attempts to find one solution for this board')
+        }
     }
+    return ({playableBoard, solvedBoard})
 }
