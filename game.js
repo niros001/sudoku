@@ -93,12 +93,12 @@ const onFill = (number) => {
   if (selected) {
     const [i, j] = selected.id.split('-');
     currentPlayableBoard[i][j] = number;
-    selected.style.color = 'black';
+    selected.classList.remove('error')
     selected.innerText = number;
 
     // Check for mistake
     if (currentPlayableBoard[i][j] !== currentSolvedBoard[i][j]) {
-      selected.style.color = 'red';
+      selected.classList.add('error')
       const mistakes = document.getElementById('mistakes');
       mistakes.innerText = (parseInt(mistakes.innerText) + 1).toString();
       if (mistakes.innerText === '3') {
@@ -150,6 +150,7 @@ const onStart = () => {
         square.classList.remove('static');
         square.classList.remove('dynamic');
         square.classList.remove('hint');
+        square.classList.remove('error')
         if (currentPlayableBoard[i][j]) {
           square.classList.add('static');
           square.innerText = currentPlayableBoard[i][j];

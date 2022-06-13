@@ -99,6 +99,10 @@ button {
     animation: color 3s linear;
 }
 
+.error {
+    color: crimson;
+}
+
 .number {
     font-size: 20px;
     font-weight: bold;
