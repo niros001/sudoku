@@ -110,6 +110,9 @@ const solver = ({board, history = {}, solutions = [], multipleSolutions = false}
     const solution = copyOf(board);
     if (multipleSolutions) {
         solutions.push(solution);
+        if (solutions.length > 1) {
+            return solutions;
+        }
         return isPossibleRollback(history) ? solver({...rollbackPossibleCell(board, history), solutions, multipleSolutions}) : solutions;
     }
     return solution
@@ -121,7 +124,7 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
     let holes;
     switch (difficulty) {
         case 'easy': {
-            holes = Math.floor(81 * 0.45); // 45% hidden
+            holes = Math.floor(81 * 0.4); // 40% hidden
             break;
         }
         case 'medium': {
@@ -129,7 +132,7 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
             break;
         }
         case 'hard': {
-            holes = Math.floor(81 * 0.55); // 55% hidden
+            holes = Math.floor(81 * 0.6); // 60% hidden
             break;
         }
     }
