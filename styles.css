@@ -10,14 +10,6 @@ body {
     background: linear-gradient(0deg, rgba(34,193,195,1) 0%, rgba(253,187,45,1) 100%);
 }
 
-.board {
-    display: flex;
-    flex-wrap: wrap;
-    max-width: calc(9*72px);
-    position: relative;
-    background-color: lavender;
-}
-
 .horizontal-lines {
     position: absolute;
     display: flex;
@@ -50,25 +42,31 @@ body {
     background-color: black;
 }
 
-.row {
+.board {
     display: flex;
-    flex-direction: row;
-    align-items: center;
-    width: calc(9*72px);
-    justify-content: space-between;
-    margin: 15px 0;
+    flex: 1;
+    flex-direction: column;
+    min-width: calc(95vw - 150px);
+    max-width: calc(95vw - 150px);
+    min-height: calc(95vw - 150px);
+    max-height: calc(95vw - 150px);
+    position: relative;
+    background-color: lavender;
 }
 
-button {
-    margin: 12px;
-    padding: 12px 24px;
-    width: 140px;
+.row {
+    display: flex;
+    align-items: center;
+}
+
+.board-row {
+    display: flex;
+    flex: 1;
 }
 
 .square {
-    width: 70px;
-    height: 70px;
     display: flex;
+    flex: 1;
     align-items: center;
     justify-content: center;
     margin: 1px;
@@ -103,6 +101,16 @@ button {
     color: crimson;
 }
 
+button {
+    margin: 12px;
+    padding: 12px 24px;
+    width: 140px;
+}
+
+button:last-of-type {
+    margin-right: 0;
+}
+
 .number {
     font-size: 20px;
     font-weight: bold;
@@ -119,9 +127,17 @@ button {
 }
 
 .info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: calc(95vw - 150px);
+    justify-content: space-between;
+    height: 40px;
+    margin: 10px 0;
     color: white;
     font-weight: bold;
     font-size: 22px;
+    white-space: nowrap;
 }
 
 #congratulation, #game-over {
@@ -144,23 +160,15 @@ button {
 }
 
 
-/*@media (orientation: landscape) and (max-width: 1180px){*/
-/*    .container {*/
-/*        flex-direction: row;*/
-/*    }*/
-/*    .board {*/
-/*        max-width: calc(9*42px);*/
-/*    }*/
-/*    .row {*/
-/*        width: calc(9*42px);*/
-/*        flex-direction: column;*/
-/*    }*/
-/*    .square {*/
-/*        width: 40px;*/
-/*        height: 40px;*/
-/*    }*/
-/*    .number {*/
-/*        margin: 5px 0;*/
-/*        box-shadow: 5px 5px 5px 5px white;*/
-/*    }*/
-/*}*/
+@media (orientation: landscape){
+    .board {
+        min-width: calc(95vh - 150px);
+        max-width: calc(95vh - 150px);
+        min-height: calc(95vh - 150px);
+        max-height: calc(95vh - 150px);
+    }
+
+    .info {
+        width: calc(95vh - 150px);
+    }
+}

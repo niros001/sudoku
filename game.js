@@ -10,11 +10,14 @@ window.addEventListener('load', () => {
     number.onclick = () => onFill(i + 1);
     number.innerText = `${i + 1}`;
     numbers.appendChild(number);
+    const boardRow = document.createElement('div');
+    boardRow.classList.add('board-row');
+    board.appendChild(boardRow);
     for (let j = 0 ; j < 9 ; j++) {
       const square = document.createElement('div');
       square.id = `${i}-${j}`;
       square.classList.add('square');
-      board.appendChild(square);
+      boardRow.appendChild(square);
     }
   }
 })
