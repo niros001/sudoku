@@ -29,7 +29,7 @@ body {
 }
 
 .horizontal-line {
-    height: 1px;
+    height: 3px;
     width: 100%;
     background-color: black;
 }
@@ -46,7 +46,7 @@ body {
 
 .vertical-line {
     height: 100%;
-    width: 1px;
+    width: 3px;
     background-color: black;
 }
 
@@ -71,9 +71,9 @@ button {
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid lightgray;
+    margin: 1px;
     background-color: white;
-    border-radius: 15px;
+    border-radius: 10px;
     font-size: 24px;
 }
 
