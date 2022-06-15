@@ -1,8 +1,8 @@
 let currentSolvedBoard, currentPlayableBoard;
 const worker = new Worker('board.js');
 
-worker.addEventListener('message', (e) => {
-  const {solvedBoard, playableBoard} = e.data;
+worker.onmessage = ({data}) => {
+  const {solvedBoard, playableBoard} = data;
   currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
   currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
 
@@ -45,7 +45,7 @@ worker.addEventListener('message', (e) => {
       clearInterval(window.timerInterval);
     }
   }, 1000);
-}, false);
+};
 
 window.addEventListener('load', () => {
   // Create board
