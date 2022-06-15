@@ -9,7 +9,7 @@
 </head>
 <body>
     <div class="container">
-        <div class="info">
+        <div class="info wrap">
             <span>Difficult: <span id="difficulty">-</span></span>
             <span>Mistakes: <span id="mistakes">0</span> / 3</span>
             <span>Hints: <span id="hints">0</span> / 2</span>
@@ -34,7 +34,7 @@
         <div id="numbers" class="info"></div>
         <h2 id="congratulation">Congratulation! You are done!</h2>
         <h2 id="game-over">Game Over!</h2>
-        <div class="info">
+        <div class="info wrap centered">
             <div class="row">
                 <input type="radio" id="easy" name="difficulty" value="easy">
                 <label for="easy">Easy</label><br>
@@ -43,7 +43,7 @@
                 <input type="radio" id="hard" name="difficulty" value="hard">
                 <label for="hard">Hard</label>
             </div>
-            <div>
+            <div class="row">
                 <button id="get-hint" disabled onclick="onHint()">Hint</button>
                 <button id="new-game" onclick="onStart()">New Game</button>
             </div>

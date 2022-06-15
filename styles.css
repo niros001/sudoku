@@ -142,8 +142,16 @@ button:last-of-type {
     margin: 10px 0;
     color: white;
     font-weight: bold;
-    font-size: 22px;
-    white-space: nowrap;
+    font-size: 20px;
+}
+
+.wrap {
+    height: max-content;
+    flex-wrap: wrap;
+}
+
+.centered {
+    justify-content: center;
 }
 
 #congratulation, #game-over {
@@ -158,6 +166,7 @@ label {
 button {
     background-color: lavender;
     border-radius: 15px;
+    width: 120px;
 }
 
 @keyframes color {
