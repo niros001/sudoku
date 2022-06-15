@@ -87,9 +87,10 @@ const rollbackPossibleCell = (board, history) => {
 const solver = ({board, history = {}, solutions = [], multipleSolutions = false}) => {
     const freeCell = getFreeCell(board);
     if (freeCell) { // There is some free cells
+        const [x, y] = freeCell;
         // Get possible numbers with history
-        let cellHistory = history[freeCell.join('-')];
-        const possibleNumbers = cellHistory || getPossibleNumbers(board, ...freeCell);
+        let cellHistory = history[`${x}-${y}`];
+        const possibleNumbers = cellHistory || getPossibleNumbers(board, x, y);
         // There is some possibilities to try
         if (possibleNumbers.length) {
             if (!cellHistory) {
@@ -97,11 +98,12 @@ const solver = ({board, history = {}, solutions = [], multipleSolutions = false}
                 cellHistory = copyOf(possibleNumbers);
             }
             // Add new number to the board
-            board[freeCell[0]][freeCell[1]] = possibleNumbers[Math.floor(Math.random() * possibleNumbers.length)];
+            const randPosition = Math.floor(Math.random() * possibleNumbers.length);
+            board[x][y] = possibleNumbers[randPosition];
             // Remove the number from the history - to not try again same number
-            cellHistory.splice(cellHistory.findIndex((n) => n === board[freeCell[0]][freeCell[1]]), 1);
+            cellHistory.splice(randPosition, 1);
             // Go next cell
-            return solver({board, history: {...history, [freeCell.join('-')]: cellHistory}, solutions, multipleSolutions})
+            return solver({board, history: {...history, [`${x}-${y}`]: cellHistory}, solutions, multipleSolutions})
         } else { // Go back to last cell and try other number
             return isPossibleRollback(history) ? solver({...rollbackPossibleCell(board, history), solutions, multipleSolutions}) : solutions;
         }
