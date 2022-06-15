@@ -12,6 +12,7 @@
         <div class="info">
             <span>Difficult: <span id="difficulty">-</span></span>
             <span>Mistakes: <span id="mistakes">0</span> / 3</span>
+            <span>Hints: <span id="hints">0</span> / 2</span>
             <span>Time: <span id="timer">00:00</span></span>
         </div>
         <div id="board" class="board">
@@ -40,7 +41,6 @@
                 <input type="radio" id="hard" name="difficulty" value="hard">
                 <label for="hard">Hard</label>
             </div>
-            <span>Hints: <span id="hints">0</span> / 2</span>
             <div>
                 <button id="get-hint" disabled onclick="onHint()">Hint</button>
                 <button id="new-game" onclick="onStart()">New Game</button>

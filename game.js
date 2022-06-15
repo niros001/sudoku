@@ -195,8 +195,15 @@ const onFinish = () => {
 }
 
 const onHint = () => {
-  const freeCell = getFreeCell(currentPlayableBoard);
-  const [x, y] = freeCell;
+  const freeCells = [];
+  for (let i = 0 ; i < 9 ; i++) {
+    for (let j = 0 ; j < 9 ; j++) {
+      if (!currentPlayableBoard[i][j]) {
+        freeCells.push([i, j]);
+      }
+    }
+  }
+  const [x, y] = freeCells[Math.floor(Math.random() * freeCells.length)];
   const square = document.getElementById(`${x}-${y}`);
   currentPlayableBoard[x][y] = currentSolvedBoard[x][y];
   square.classList.add('hint');
