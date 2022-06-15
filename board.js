@@ -139,3 +139,10 @@ const generateBoard = (difficulty) => {
     }
     return ({playableBoard, solvedBoard})
 }
+
+onmessage = ({data: {exec, difficultyLvl}}) => {
+    if(exec) {
+        postMessage(generateBoard(difficultyLvl));
+    }
+};
+

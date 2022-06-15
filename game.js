@@ -1,4 +1,51 @@
 let currentSolvedBoard, currentPlayableBoard;
+const worker = new Worker('board.js');
+
+worker.addEventListener('message', (e) => {
+  const {solvedBoard, playableBoard} = e.data;
+  currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
+  currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
+
+  // Show / Hide relevant components
+  document.getElementById('board').style.opacity = '1';
+  document.getElementById('new-game').removeAttribute('disabled');
+  document.getElementById('get-hint').removeAttribute('disabled');
+
+  for(let i = 0 ; i < 9 ; i++) {
+    for (let j = 0 ; j < 9 ; j++) {
+      const square = document.getElementById(`${i}-${j}`);
+      square.classList.remove('selected');
+      square.classList.remove('highlight');
+      square.classList.remove('static');
+      square.classList.remove('dynamic');
+      square.classList.remove('hint');
+      square.classList.remove('error')
+      if (currentPlayableBoard[i][j]) {
+        square.classList.add('static');
+        square.innerText = currentPlayableBoard[i][j];
+        square.onclick = null;
+      } else {
+        square.classList.add('dynamic');
+        square.innerText = '';
+        square.onclick = () => onSelect(i, j);
+      }
+    }
+  }
+
+  // Set timer
+  let seconds = 0;
+  const timer = document.getElementById('timer');
+  timer.innerText = '00:00';
+  clearInterval(window.timerInterval);
+  window.timerInterval = setInterval(() => {
+    seconds += 1;
+    const minutes = Math.floor(seconds / 60);
+    timer.innerText = `${minutes.toString().padStart(2, '0')}:${Math.min(seconds - (minutes * 60), 59).toString().padStart(2, '0')}`
+    if (seconds === 3600) {
+      clearInterval(window.timerInterval);
+    }
+  }, 1000);
+}, false);
 
 window.addEventListener('load', () => {
   // Create board
@@ -121,6 +168,12 @@ const onFill = (number) => {
 }
 
 const onStart = () => {
+  // Show difficulty
+  const difficulty = document.getElementById('difficulty');
+  const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
+  difficulty.style.textTransform = 'capitalize';
+  difficulty.innerText = difficultyLvl;
+
   // Show / Hide relevant components
   document.getElementById('numbers').style.display = 'flex'
   document.getElementById('congratulation').style.display = 'none'
@@ -130,56 +183,8 @@ const onStart = () => {
   document.getElementById('board').style.opacity = '0.7';
   document.getElementById('new-game').setAttribute('disabled', '');
 
-  setTimeout(() => {
-    // Set board
-    const difficulty = document.getElementById('difficulty');
-    const difficultyLvl = document.querySelector('input[name="difficulty"]:checked').value;
-    difficulty.style.textTransform = 'capitalize';
-    difficulty.innerText = difficultyLvl;
-    const {solvedBoard, playableBoard} = generateBoard(difficultyLvl);
-    currentSolvedBoard = JSON.parse(JSON.stringify(solvedBoard))
-    currentPlayableBoard = JSON.parse(JSON.stringify(playableBoard));
-
-    // Show / Hide relevant components
-    document.getElementById('board').style.opacity = '1';
-    document.getElementById('new-game').removeAttribute('disabled');
-    document.getElementById('get-hint').removeAttribute('disabled');
-
-    for(let i = 0 ; i < 9 ; i++) {
-      for (let j = 0 ; j < 9 ; j++) {
-        const square = document.getElementById(`${i}-${j}`);
-        square.classList.remove('selected');
-        square.classList.remove('highlight');
-        square.classList.remove('static');
-        square.classList.remove('dynamic');
-        square.classList.remove('hint');
-        square.classList.remove('error')
-        if (currentPlayableBoard[i][j]) {
-          square.classList.add('static');
-          square.innerText = currentPlayableBoard[i][j];
-          square.onclick = null;
-        } else {
-          square.classList.add('dynamic');
-          square.innerText = '';
-          square.onclick = () => onSelect(i, j);
-        }
-      }
-    }
-
-    // Set timer
-    let seconds = 0;
-    const timer = document.getElementById('timer');
-    timer.innerText = '00:00';
-    clearInterval(window.timerInterval);
-    window.timerInterval = setInterval(() => {
-      seconds += 1;
-      const minutes = Math.floor(seconds / 60);
-      timer.innerText = `${minutes.toString().padStart(2, '0')}:${Math.min(seconds - (minutes * 60), 59).toString().padStart(2, '0')}`
-      if (seconds === 3600) {
-        clearInterval(window.timerInterval);
-      }
-    }, 1000);
-  }, 10)
+  // Generate board with worker
+  worker.postMessage({exec: true, difficultyLvl});
 }
 
 const onFinish = () => {
