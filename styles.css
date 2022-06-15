@@ -42,16 +42,19 @@ body {
     background-color: black;
 }
 
+.board-wrapper {
+    position: relative;
+    min-width: 288px;
+    min-height: 288px;
+    background-color: lavender;
+}
+
 .board {
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-width: 95vw;
-    max-width: 95vw;
-    min-height: 95vw;
-    max-height: 95vw;
-    position: relative;
-    background-color: lavender;
+    width: 95vw;
+    height: 95vw;
 }
 
 .row {
@@ -73,6 +76,8 @@ body {
     background-color: white;
     border-radius: 10px;
     font-size: 24px;
+    min-width: 30px;
+    min-height: 30px;
 }
 
 .selected {
@@ -130,6 +135,7 @@ button:last-of-type {
     display: flex;
     flex-direction: row;
     align-items: center;
+    min-width: 288px;
     width: 95vw;
     justify-content: space-between;
     height: 40px;
@@ -162,10 +168,8 @@ button {
 
 @media (orientation: landscape){
     .board {
-        min-width: calc(95vh - 150px);
-        max-width: calc(95vh - 150px);
-        min-height: calc(95vh - 150px);
-        max-height: calc(95vh - 150px);
+        width: calc(95vh - 150px);
+        height: calc(95vh - 150px);
     }
 
     .info {
