@@ -46,10 +46,10 @@ body {
     display: flex;
     flex: 1;
     flex-direction: column;
-    min-width: calc(95vw - 150px);
-    max-width: calc(95vw - 150px);
-    min-height: calc(95vw - 150px);
-    max-height: calc(95vw - 150px);
+    min-width: 95vw;
+    max-width: 95vw;
+    min-height: 95vw;
+    max-height: 95vw;
     position: relative;
     background-color: lavender;
 }
@@ -130,7 +130,7 @@ button:last-of-type {
     display: flex;
     flex-direction: row;
     align-items: center;
-    width: calc(95vw - 150px);
+    width: 95vw;
     justify-content: space-between;
     height: 40px;
     margin: 10px 0;
