@@ -114,7 +114,11 @@ const getPlayableBoard = (solvedBoard, difficulty) => {
             newBoard[xPos][yPos] = lastTry;
         }
         if (!availableNumbers.length) {
-            throw new Error('Many attempts to find one solution for this board')
+            // Regenerate board
+            // throw new Error('Many attempts to find one solution for this board')
+
+            // Just show the board - for better performance
+            return newBoard;
         }
     }
     return newBoard;
