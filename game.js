@@ -71,7 +71,7 @@ window.addEventListener('load', () => {
 
 document.addEventListener('keypress', ({key}) => {
   if (key >= 1 && key <= 9) {
-    onFill(key);
+    onFill(parseInt(key));
   }
 }, false);
 
@@ -216,15 +216,19 @@ const onHint = () => {
       }
     }
   }
-  const [x, y] = freeCells[Math.floor(Math.random() * freeCells.length)];
-  const square = document.getElementById(`${x}-${y}`);
-  currentPlayableBoard[x][y] = currentSolvedBoard[x][y];
-  square.classList.add('hint');
-  square.innerText = currentSolvedBoard[x][y];
-  const hints = document.getElementById('hints');
-  hints.innerText = (parseInt(hints.innerText) + 1).toString();
-  if (hints.innerText === '2') {
-    document.getElementById('get-hint').setAttribute('disabled', '');
+  if (freeCells.length) {
+    const [x, y] = freeCells[Math.floor(Math.random() * freeCells.length)];
+    const square = document.getElementById(`${x}-${y}`);
+    currentPlayableBoard[x][y] = currentSolvedBoard[x][y];
+    square.classList.add('hint');
+    square.innerText = currentSolvedBoard[x][y];
+    const hints = document.getElementById('hints');
+    hints.innerText = (parseInt(hints.innerText) + 1).toString();
+    if (hints.innerText === '2') {
+      document.getElementById('get-hint').setAttribute('disabled', '');
+    }
+    onFinish();
+  } else {
+      alert('There is no free cell!');
   }
-  onFinish();
 }
