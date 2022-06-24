@@ -69,6 +69,13 @@ window.addEventListener('load', () => {
   }
 })
 
+document.addEventListener('keypress', ({key}) => {
+  if (key >= 1 && key <= 9) {
+    onFill(key);
+  }
+}, false);
+
+
 const getColumns = (currentPlayableBoard) => {
   const columns = []
   for (let i = 0 ; i < 9 ; i++) {
@@ -140,7 +147,8 @@ const onSelect = (i, j) => {
 
 const onFill = (number) => {
   const selected = document.getElementsByClassName('selected')[0];
-  if (selected) {
+  const mistakes = document.getElementById('mistakes');
+  if (selected && mistakes.innerText < 3) {
     const [i, j] = selected.id.split('-');
     currentPlayableBoard[i][j] = number;
     selected.classList.remove('error')
@@ -163,7 +171,7 @@ const onFill = (number) => {
     onFinish();
 
   } else {
-    console.log('Please select square!')
+    alert('Can\'t fill square!')
   }
 }
 
